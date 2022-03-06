@@ -1,0 +1,13 @@
+<h1>Pichnic webshop</h1>
+<div class="row">
+    <div class="col-12 col-md-3 search-form">
+        {{{block.searchForm}}}
+    </div>
+    <div class="col-12 col-md-9 search-result">
+        {{#block.searchResult.getItems}}
+            <div>
+                <a href="picnic/index/product/{{id}}" class="openmodal" target="_blank">{{name}}</a>
+            </div>
+        {{/block.searchResult.getItems}}
+    </div>
+</div>

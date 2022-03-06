@@ -1,5 +1,5 @@
 {
-  "name": "vitessecms/picnic",
+  "name": "vitessecms/Picnic",
   "type": "library",
   "description": "Picnic module for VitesseCms",
   "keywords": ["php","phalcon","vitessecms"],
@@ -18,5 +18,9 @@
     }
   },
   "require": {
+    "ext-json": "*",
+    "vitessecms/core": "~0.2.20",
+    "guzzlehttp/guzzle": "~7.4.1",
+    "vitessecms/form": "~0.2.8"
   }
 }

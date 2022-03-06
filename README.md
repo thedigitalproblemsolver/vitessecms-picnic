@@ -1,1 +1,1 @@
-# vitessecms-picnic
+# vitessecms-Picnic
