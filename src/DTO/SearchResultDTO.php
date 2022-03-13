@@ -11,13 +11,36 @@ class SearchResultDTO {
      */
     private $data;
 
+    /**
+     * @var array
+     */
+    private $items;
+
     public function __construct(ResponseInterface $response)
     {
         $this->data = json_decode((string)$response->getBody(), true)[0];
+        $items = [];
+        foreach ($this->data['items'] as $item):
+            if(isset($item['name'])) :
+                $this->items[] = new SearchResultItemDTO($item);
+            endif;
+        endforeach;
+    }
+
+    public function setItems(array $items): SearchResultDTO
+    {
+        $this->items = $items;
+
+        return $this;
     }
 
     public function getItems(): array
     {
-        return $this->data['items'];
+        return $this->items;
+    }
+
+    public function hasItems(): bool
+    {
+        return count($this->items) > 0;
     }
 }

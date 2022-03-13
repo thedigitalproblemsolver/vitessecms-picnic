@@ -1,13 +1,85 @@
-<h1>Pichnic webshop</h1>
 <div class="row">
-    <div class="col-12 col-md-3 search-form">
-        {{{block.searchForm}}}
+    <div class="col-12">
+        <h1>Picnic webshop
+            <a class="btn btn-primary {{#block.searchActive}}active{{/block.searchActive}}" href="{{block.currentSlug}}">
+                <i class="fa fa-search"></i>&nbsp;Zoeken
+            </a>
+            <a class="btn btn-primary {{#block.cartActive}}active{{/block.cartActive}}" href="{{block.currentSlug}}?action=cart">
+                Mandje&nbsp;<i class="fa fa-shopping-cart"></i>
+            </a>
+            {{#block.user.isLoggedIn}}
+                <a class="btn btn-primary {{#block.favoriteActive}}active{{/block.favoriteActive}}" href="{{block.currentSlug}}?action=favorite">
+                    Favorieten&nbsp;<i class="fa fa-heart"></i>
+                </a>
+            {{/block.user.isLoggedIn}}
+        </h1>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-12 col-md-3">
+        <div class=" search-form">
+            {{{block.searchForm}}}
+        </div>
     </div>
     <div class="col-12 col-md-9 search-result">
-        {{#block.searchResult.getItems}}
-            <div>
-                <a href="picnic/index/product/{{id}}" class="openmodal" target="_blank">{{name}}</a>
-            </div>
-        {{/block.searchResult.getItems}}
+        {{#block.searchResult.hasItems}}
+            <table class="table table-bordered">
+                {{#block.searchResult.getItems}}
+                    <tr>
+                        <td>
+                            <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
+                        </td>
+                        <td>
+                            <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
+                            {{#block.user.isLoggedIn}}
+                                {{#isFavorite}}
+                                    <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
+                                {{/isFavorite}}
+                                {{^isFavorite}}
+                                    <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
+                                {{/isFavorite}}
+                            {{/block.user.isLoggedIn}}
+                        </td>
+                    </tr>
+                {{/block.searchResult.getItems}}
+            </table>
+        {{/block.searchResult.hasItems}}
+        {{#block.cart.hasItems}}
+            <table class="table table-bordered">
+                {{#block.cart.getItems}}
+                    <tr id="{{getId}}">
+                        <td>
+                            <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
+                        </td>
+                        <td>
+                            &euro; {{getDisplayPrice}}
+                        </td>
+                        <td>
+                            <a id="delete_{{getId}}" class="fa fa-trash" href="picnic/index/removefromcart/{{getId}}"></a>
+                            <a class="fa fa-plus" href="picnic/index/addtocart/{{getId}}"></a>
+                        </td>
+                    </tr>
+                {{/block.cart.getItems}}
+                <tr>
+                    <th class="text-right">totaal</th>
+                    <th colspan="2">&euro; {{block.cart.getCheckoutTotalPrice}}</th>
+                </tr>
+            </table>
+        {{/block.cart.hasItems}}
+        {{#block.user.isLoggedIn}}
+            {{#block.hasFavorites}}
+                <table class="table table-bordered">
+                    {{#block.favorites}}
+                        <tr id="{{getId}}">
+                            <td>{{getProduct.getName}}</td>
+                            <td>
+                                <a id="delete_{{getId}}" class="fa fa-trash" href="picnic/index/removefavorite/{{getId}}"></a>
+                                <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getProduct.getId}}"></a>
+                            </td>
+                        </tr>
+                    {{/block.favorites}}
+                </table>
+            {{/block.hasFavorites}}
+        {{/block.user.isLoggedIn}}
     </div>
 </div>

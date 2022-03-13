@@ -34,6 +34,11 @@ class ProductDTO
         return $this->data['product_details']['name'];
     }
 
+    public function getDisplayPrice(): float
+    {
+        return $this->data['product_details']['display_price']/100;
+    }
+
     public function getDescription(): string
     {
         return $this->data['product_details']['description']??'';

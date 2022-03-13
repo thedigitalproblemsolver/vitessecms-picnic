@@ -9,6 +9,11 @@ class SearchForm extends AbstractForm
 {
     public function initialize(): void
     {
-        $this->addText('Zoekterm', 'searchTerm', (new Attributes())->setRequired())->addSubmitButton('Zoeken');
+        $this->addText(
+            'Term',
+            'picnic_searchTerm',
+            (new Attributes())->setRequired()->setDefaultValue($this->session->get('picnic_searchTerm'))
+        )->addSubmitButton('Zoeken')
+        ;
     }
 }

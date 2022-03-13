@@ -5,6 +5,7 @@ namespace VitesseCms\Picnic\Services;
 use Exception;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
+use VitesseCms\Picnic\DTO\CartDTO;
 use VitesseCms\Picnic\DTO\ProductDTO;
 use VitesseCms\Picnic\DTO\SearchResultDTO;
 use VitesseCms\Picnic\Enums\PicnicEnum;
@@ -78,28 +79,19 @@ class PicnicService {
         return $this->get($path);
     }
 
-    public function getCart()
+    public function getCart(): CartDTO
     {
-        return $this->get('/cart');
+        return new CartDTO($this->get('/cart'));
     }
 
-    public function addProduct(int $productId, $count = 1): ResponseInterface
+    public function addProduct(int $productId, int $count = 1): ResponseInterface
     {
-        $data = [
-            'product_id' => $productId,
-            'count' => $count,
-        ];
-
-        return $this->post('/cart/add_product', $data);
+        return $this->post('/cart/add_product', ['product_id' => $productId, 'count' => $count]);
     }
 
-    public function removeProduct($productId, $count = 1)
+    public function removeProduct(int $productId, int $count = 1): ResponseInterface
     {
-        $data = [
-            'product_id' => $productId,
-            'count' => $count,
-        ];
-        return $this->post('/cart/remove_product', $data);
+        return $this->post('/cart/remove_product', ['product_id' => $productId, 'count' => $count]);
     }
 
     public function clearCart()
