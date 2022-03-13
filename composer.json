@@ -1,5 +1,5 @@
 {
-  "name": "vitessecms/Picnic",
+  "name": "vitessecms/picnic",
   "type": "library",
   "description": "Picnic module for VitesseCms",
   "keywords": ["php","phalcon","vitessecms"],
