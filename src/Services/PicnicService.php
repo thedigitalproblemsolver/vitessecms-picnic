@@ -195,4 +195,6 @@ class PicnicService {
     {
         return array_key_exists($name, $this->headers);
     }
+
+    
 }
