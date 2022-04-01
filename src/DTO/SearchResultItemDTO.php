@@ -17,6 +17,14 @@ class SearchResultItemDTO {
      */
     private $favorite;
 
+    /*private const ImageSizes = [
+        TINY: "tiny",
+        SMALL: "small",
+        MEDIUM: "medium",
+        LARGE: "large",
+        EXTRA_LARGE: "extra-large"
+    ]*/
+
     public function __construct(array $item)
     {
         $this->item = $item;
@@ -30,6 +38,11 @@ class SearchResultItemDTO {
     public function getId(): int
     {
         return (int)$this->item['id'];
+    }
+
+    public function getImage(): string
+    {
+        return  'https://storefront-prod.nl.Picnicinternational.com/static/images/'.$this->item['image_id'].'/tiny.png';
     }
 
     public function getFavorite(): Favorite
