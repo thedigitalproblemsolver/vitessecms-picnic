@@ -5,7 +5,7 @@
   "keywords": ["php","phalcon","vitessecms"],
   "homepage": "https://github.com/thedigitalproblemsolver/VitesseCMS",
   "license": "GPL-2.0-or-later",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "authors": [
     {
       "name": "Jasper Jaklofsky",
@@ -22,7 +22,7 @@
     "vitessecms/core": "~0.2.21",
     "guzzlehttp/guzzle": "7.4.1",
     "vitessecms/form": "~0.2.8",
-    "vitessecms/google": "~0.2.3",
+    "vitessecms/google": "~0.2.4",
     "eristemena/dialogflow-fulfillment-webhook-php": "^1.3"
   }
 }
