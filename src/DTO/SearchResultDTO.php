@@ -43,4 +43,9 @@ class SearchResultDTO {
     {
         return count($this->items) > 0;
     }
+
+    public function getItemsCount(): int
+    {
+        return count($this->items);
+    }
 }
