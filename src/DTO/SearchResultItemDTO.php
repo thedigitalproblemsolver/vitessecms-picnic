@@ -42,7 +42,7 @@ class SearchResultItemDTO {
 
     public function getImage(): string
     {
-        return  'https://storefront-prod.nl.Picnicinternational.com/static/images/'.$this->item['image_id'].'/tiny.png';
+        return  'https://storefront-prod.nl.Picnicinternational.com/static/images/'.$this->item['image_id'].'/small.png';
     }
 
     public function getFavorite(): Favorite

@@ -32,13 +32,14 @@ class DialogflowWebhookListener
         if (
             !empty($this->username)
             && !empty($this->password)
-            && $webhookService->getRequestSource()=='google'
+            && $webhookService->getRequestSource() === 'google'
         ) :
             $this->picnic->login($this->username,$this->password);
             $searchResults = $this->picnic->search($webhookService->getParameters()['searchterm']);
 
             $conversation = $webhookService->getActionConversation();
-            if($webhookService->isAudioOnly()) :
+            $surface = $conversation->getSurface();
+            if(!$surface->hasScreen()) :
                 if($searchResults->getItemsCount() > 10 ) :
                     $message = 'I found '.$searchResults->getItemsCount().' results. That is to much. Please try another searchterm';
                 else :
@@ -49,7 +50,7 @@ class DialogflowWebhookListener
                 endif;
                 $conversation->ask($message);
             else :
-                $conversation->ask('I found the items above');
+                $conversation->ask('I found the items above. To order say "add optionnumber to cart" ');
                 $listCard = ListCard::create()->title('Search result');
                 /**
                  * @var  $key
@@ -57,9 +58,8 @@ class DialogflowWebhookListener
                  */
                 foreach ($searchResults->getItems() as $key => $searchResultItemDTO) :
                     $listCard->addOption(Option::create()
-                        ->key('OPTION_'.$key)
+                        ->key('OPTION_'.$searchResultItemDTO->getId())
                         ->title($searchResultItemDTO->getName())
-                        ->description('Select option '.$key)
                         ->image($searchResultItemDTO->getImage())
                     );
                 endforeach;
@@ -67,6 +67,27 @@ class DialogflowWebhookListener
                 $conversation->ask($listCard);
             endif;
             $webhookService->reply($conversation);
+        endif;
+    }
+
+    public function PicnicAddToCart(Event $event, WebhookService $webhookService) : void
+    {
+        if (
+            !empty($this->username)
+            && !empty($this->password)
+            && $webhookService->getRequestSource() === 'google'
+        ) :
+            $conversation = $webhookService->getActionConversation();
+            $surface = $conversation->getSurface();
+            if(!$surface->hasScreen()) :
+                $conversation->ask('This is work in progress');
+                $webhookService->reply($conversation);
+            else :
+                $conversation = $webhookService->getActionConversation();
+                $productId = (int)str_replace('OPTION_', '', $conversation->getArguments()->get('OPTION'));
+                $this->picnic->login($this->username,$this->password);
+                $this->picnic->addProduct($productId);
+            endif;
         endif;
     }
 }
