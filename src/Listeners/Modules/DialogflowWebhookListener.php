@@ -6,6 +6,7 @@ use Dialogflow\Action\Questions\ListCard;
 use Dialogflow\Action\Questions\ListCard\Option;
 use Phalcon\Events\Event;
 use VitesseCms\Google\Services\WebhookService;
+use VitesseCms\Picnic\DTO\CartItemDTO;
 use VitesseCms\Picnic\DTO\SearchResultItemDTO;
 use VitesseCms\Picnic\Services\PicnicService;
 
@@ -88,6 +89,49 @@ class DialogflowWebhookListener
                 $this->picnic->login($this->username,$this->password);
                 $this->picnic->addProduct($productId);
             endif;
+        endif;
+    }
+
+    public function PicnicGetCart(Event $event, WebhookService $webhookService) : void
+    {
+        if (
+            !empty($this->username)
+            && !empty($this->password)
+            && $webhookService->getRequestSource() === 'google'
+        ) :
+            $this->picnic->login($this->username,$this->password);
+            $cart = $this->picnic->getCart();
+
+            $conversation = $webhookService->getActionConversation();
+            $surface = $conversation->getSurface();
+            if(!$surface->hasScreen()) :
+                /*if($cart->getItemsCount() > 10 ) :
+                    $message = 'I found '.$searchResults->getItemsCount().' results. That is to much. Please try another searchterm';
+                else :
+                    $message = 'I found '.$searchResults->getItemsCount().' results. These are: ';
+                    foreach ($searchResults->getItems() as $key => $searchResultItemDTO) :
+                        $message .= $searchResultItemDTO->getName().'. ';
+                    endforeach;
+                endif;
+                $conversation->ask($message);*/
+            else :
+                $conversation->ask('Your cart contains the items above.');
+                $listCard = ListCard::create()->title('The content of your cart');
+                /**
+                 * @var  $key
+                 * @var  CartItemDTO $cartItemDTO
+                 */
+                foreach ($cart->getItems() as $key => $cartItemDTO) :
+                    $listCard->addOption(Option::create()
+                        ->key('OPTION_'.$cartItemDTO->getId())
+                        ->title($cartItemDTO->getName())
+                        //->image($cartItemDTO->getImage())
+                    );
+                endforeach;
+
+                $conversation->ask($listCard);
+            endif;
+            $webhookService->reply($conversation);
         endif;
     }
 }
