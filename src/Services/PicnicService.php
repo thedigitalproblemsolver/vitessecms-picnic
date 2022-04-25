@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use VitesseCms\Picnic\DTO\CartDTO;
 use VitesseCms\Picnic\DTO\CategoriesDTO;
+use VitesseCms\Picnic\DTO\ListsDTO;
 use VitesseCms\Picnic\DTO\ProductDTO;
 use VitesseCms\Picnic\DTO\SearchResultDTO;
 use VitesseCms\Picnic\Enums\PicnicEnum;
@@ -70,7 +71,7 @@ class PicnicService {
         return new SearchResultDTO($this->get('/search?search_term=' . $query));
     }
 
-    public function getList(string $listPath, string $subList = null)
+    public function getList(string $listPath, string $subList = null): ListsDTO
     {
         $path = ['/lists/', $listPath];
         if($subList !== null):
@@ -78,7 +79,7 @@ class PicnicService {
         endif;
         //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions
         //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions?sublist=624d52036a3ea840a1408e19
-        return $this->get(implode('',$path));
+        return new ListsDTO(json_decode((string)$this->get(implode('',$path))->getBody(),true));
     }
 
     public function getCart(): CartDTO

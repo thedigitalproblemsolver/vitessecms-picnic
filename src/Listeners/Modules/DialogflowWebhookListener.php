@@ -7,7 +7,7 @@ use Dialogflow\Action\Questions\ListCard\Option;
 use Phalcon\Events\Event;
 use VitesseCms\Google\Services\WebhookService;
 use VitesseCms\Picnic\DTO\CartItemDTO;
-use VitesseCms\Picnic\DTO\SearchResultItemDTO;
+use VitesseCms\Picnic\DTO\ProductDTO;
 use VitesseCms\Picnic\Services\PicnicService;
 
 class DialogflowWebhookListener
@@ -45,8 +45,8 @@ class DialogflowWebhookListener
                     $message = 'I found '.$searchResults->getItemsCount().' results. That is to much. Please try another searchterm';
                 else :
                     $message = 'I found '.$searchResults->getItemsCount().' results. These are: ';
-                    foreach ($searchResults->getItems() as $key => $searchResultItemDTO) :
-                        $message .= $searchResultItemDTO->getName().'. ';
+                    foreach ($searchResults->getItems() as $key => $productDTO) :
+                        $message .= $productDTO->getName().'. ';
                     endforeach;
                 endif;
                 $conversation->ask($message);
@@ -55,13 +55,13 @@ class DialogflowWebhookListener
                 $listCard = ListCard::create()->title('Search result');
                 /**
                  * @var  $key
-                 * @var  SearchResultItemDTO $searchResultItemDTO
+                 * @var  ProductDTO $productDTO
                  */
-                foreach ($searchResults->getItems() as $key => $searchResultItemDTO) :
+                foreach ($searchResults->getItems() as $key => $productDTO) :
                     $listCard->addOption(Option::create()
-                        ->key('OPTION_'.$searchResultItemDTO->getId())
-                        ->title($searchResultItemDTO->getName())
-                        ->image($searchResultItemDTO->getImage())
+                        ->key('OPTION_'.$productDTO->getId())
+                        ->title($productDTO->getName())
+                        ->image($productDTO->getImage())
                     );
                 endforeach;
 

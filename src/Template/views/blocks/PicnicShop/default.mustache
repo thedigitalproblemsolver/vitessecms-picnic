@@ -7,6 +7,9 @@
         <a class="btn btn-primary {{#block.cartActive}}active{{/block.cartActive}}" href="{{block.currentSlug}}?action=cart">
             Mandje&nbsp;<i class="fa fa-shopping-cart"></i>
         </a>
+        <a class="btn btn-primary {{#block.listActive}}active{{/block.listActive}}" href="{{block.currentSlug}}?action=list">
+            Categorie&euml;n&nbsp;<i class="fa fa-list"></i>
+        </a>
         {{#block.user.isLoggedIn}}
             <a class="btn btn-primary {{#block.favoriteActive}}active{{/block.favoriteActive}}" href="{{block.currentSlug}}?action=favorite">
                 Favorieten&nbsp;<i class="fa fa-heart"></i>
@@ -21,27 +24,6 @@
     <div class="col-12 col-md-3">
         <div class=" search-form">
             {{{block.searchForm}}}
-        </div>
-        <div class="categories">
-            <h2>Categorie&euml;n</h2>
-            {{#block.categories.hasCategories}}
-                <ul>
-                {{#block.categories.getCategories}}
-                    <li>
-                        <a href="{{block.currentSlug}}?{{getListLink}}">{{getName}}</a>
-                        {{#hasSubCategories}}
-                            <ul>
-                            {{#getSubCategories}}
-                                <li>
-                                    <a href="{{block.currentSlug}}?{{getListLink}}">{{getName}}</a>
-                                </li>
-                            {{/getSubCategories}}
-                            </ul>
-                        {{/hasSubCategories}}
-                    </li>
-                {{/block.categories.getCategories}}
-                </ul>
-            {{/block.categories.hasCategories}}
         </div>
     </div>
     <div class="col-12 col-md-9 search-result">
@@ -112,23 +94,56 @@
             <table class="table table-bordered">
                 {{#block.previousOrdered}}
                         <tr>
-                                <td>
-                                    <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
-                                </td>
-                                <td>
-                                    <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
-                                    {{#block.user.isLoggedIn}}
-                                        {{#isFavorite}}
-                                            <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
-                                        {{/isFavorite}}
-                                        {{^isFavorite}}
-                                            <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
-                                        {{/isFavorite}}
-                                    {{/block.user.isLoggedIn}}
-                                </td>
-                            </tr>
+                            <td>
+                                <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
+                            </td>
+                            <td>
+                                <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
+                                {{#block.user.isLoggedIn}}
+                                    {{#isFavorite}}
+                                        <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
+                                    {{/isFavorite}}
+                                    {{^isFavorite}}
+                                        <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
+                                    {{/isFavorite}}
+                                {{/block.user.isLoggedIn}}
+                            </td>
+                        </tr>
                 {{/block.previousOrdered}}
             </table>
         {{/block.hasPreviousOrdered}}
+        {{#block.lists.hasCategories}}
+            <ul>
+                {{#block.lists.getCategories}}
+                    <li>
+                        <a href="{{block.currentSlug}}?action=list&{{getListLink}}">{{getName}}</a>
+                    </li>
+                {{/block.lists.getCategories}}
+            </ul>
+        {{/block.lists.hasCategories}}
+        {{#block.lists.hasProducts}}
+            <table class="table table-bordered">
+                {{#block.lists.getProducts}}
+                    <tr>
+                        <td>
+                            <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
+                        </td>
+                        <td>
+                            <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
+                            {{#block.user.isLoggedIn}}
+                                {{#isFavorite}}
+                                    <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
+                                {{/isFavorite}}
+                                {{^isFavorite}}
+                                    <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
+                                {{/isFavorite}}
+                            {{/block.user.isLoggedIn}}
+                        </td>
+                    </tr>
+                {{/block.lists.getProducts}}
+            </table>
+        {{/block.lists.hasProducts}}
+
+
     </div>
 </div>

@@ -22,7 +22,7 @@ class SearchResultDTO {
         $items = [];
         foreach ($this->data['items'] as $item):
             if(isset($item['name'])) :
-                $this->items[] = new SearchResultItemDTO($item);
+                $this->items[] = new ProductDTO($item);
             endif;
         endforeach;
     }

@@ -46,16 +46,13 @@ class PicnicShop extends AbstractBlockModel
             );
             $block->set('currentSlug', $this->getDi()->view->getCurrentItem()->getSlug());
             $block->set('user', $this->getDi()->user);
-            $block->set('categories', $this->picnicService->getCategories());
-            if($this->getDi()->request->has('list')):
-                var_dump($this->picnicService->getList(
-                    $this->getDi()->request->get('list'),
-                    $this->getDi()->request->get('subList')
-                ));
-                die();
-            endif;
 
             switch ($this->getDi()->request->get('action')) :
+                case 'list':
+                    $block->set('title', 'lijstweergave');
+                    $block->set('listActive', true);
+                    $this->parseList($block);
+                    break;
                 case 'cart':
                     $block->set('cart', $this->picnicService->getCart());
                     $block->set('title', 'mandje');
@@ -105,6 +102,7 @@ class PicnicShop extends AbstractBlockModel
             $block->set('searchResult', $searchResult);
         else :
             $block->set('title', 'Eerder besteld');
+            $block->set('categories', $this->picnicService->getCategories());
             $block->set('previousOrdered', $block->_('categories')->getPreviousOrdered());
             $block->set('hasPreviousOrdered', $block->_('categories')->hasPreviousOrdered());
         endif;
@@ -127,5 +125,32 @@ class PicnicShop extends AbstractBlockModel
             $block->set('favorites', $products);
             $block->set('hasFavorites', true);
         endif;
+    }
+
+    private function parseList(Block $block): void
+    {
+        if($this->getDi()->request->has('list')):
+            $lists = $this->picnicService->getList(
+                $this->getDi()->request->get('list'),
+                $this->getDi()->request->get('subList')
+            );
+            if ($lists->hasProducts()):
+                $products = [];
+                foreach ($lists->getProducts() as $product) :
+                    $product->setFavorite($this->favoriteRepository->findFirst(
+                        new FindValueIterator([
+                            new FindValue('userId', (string) $this->getDi()->user->getId()),
+                            new FindValue('picnicId', (int) $product->getId() )
+                        ])
+                    ));
+                    $products[] = $product;
+                endforeach;
+                $lists->setProducts($products);
+            endif;
+        else :
+            $lists = $this->picnicService->getCategories();
+        endif;
+
+        $block->set('lists', $lists);
     }
 }

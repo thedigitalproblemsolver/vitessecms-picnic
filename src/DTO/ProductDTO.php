@@ -2,7 +2,7 @@
 
 namespace VitesseCms\Picnic\DTO;
 
-use Psr\Http\Message\ResponseInterface;
+use VitesseCms\Picnic\Models\Favorite;
 
 class ProductDTO
 {
@@ -10,6 +10,11 @@ class ProductDTO
      * @var mixed
      */
     private $data;
+
+    /**
+     * @var Favorite
+     */
+    private $favorite;
 
     /*private const ImageSizes = [
         TINY: "tiny",
@@ -22,6 +27,7 @@ class ProductDTO
     public function __construct(array $data)
     {
         $this->data = $data;
+        $this->favorite = false;
     }
 
     public function getId(): string
@@ -47,5 +53,22 @@ class ProductDTO
     public function getImageUrl(): string
     {
         return  'https://storefront-prod.nl.Picnicinternational.com/static/images/'.$this->data['image_id'].'/large.png';
+    }
+
+    public function getFavorite(): Favorite
+    {
+        return $this->favorite;
+    }
+
+    public function isFavorite(): bool
+    {
+        return $this->favorite !== null;
+    }
+
+    public function setFavorite(?Favorite $favorite): self
+    {
+        $this->favorite = $favorite;
+
+        return $this;
     }
 }
