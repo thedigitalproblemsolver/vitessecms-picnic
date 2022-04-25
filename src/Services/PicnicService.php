@@ -6,6 +6,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use VitesseCms\Picnic\DTO\CartDTO;
+use VitesseCms\Picnic\DTO\CategoriesDTO;
 use VitesseCms\Picnic\DTO\ProductDTO;
 use VitesseCms\Picnic\DTO\SearchResultDTO;
 use VitesseCms\Picnic\Enums\PicnicEnum;
@@ -69,14 +70,15 @@ class PicnicService {
         return new SearchResultDTO($this->get('/search?search_term=' . $query));
     }
 
-    public function getList($listId = null)
+    public function getList(string $listPath, string $subList = null)
     {
-        if ($listId) {
-            $path = "/lists/" . $listId;
-        } else {
-            $path = "/lists/";
-        }
-        return $this->get($path);
+        $path = ['/lists/', $listPath];
+        if($subList !== null):
+            $path[] = '?sublist='.$subList;
+        endif;
+        //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions
+        //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions?sublist=624d52036a3ea840a1408e19
+        return $this->get(implode('',$path));
     }
 
     public function getCart(): CartDTO
@@ -101,7 +103,7 @@ class PicnicService {
 
     public function getDeliverySlots()
     {
-        return $this->get('/cart/delivery_slots');
+        return $this->get('/cart/delivery_slots')->getBody();
     }
 
     public function getDelivery($deliveryId)
@@ -117,7 +119,7 @@ class PicnicService {
         if ($summary) {
             return $this->post('/deliveries/summary', $data);
         }
-        return $this->post('/deliveries', $data);
+        return $this->post('/lists');
     }
 
     public function getCurrentDeliveries()
@@ -126,9 +128,14 @@ class PicnicService {
         return $this->post('/deliveries/', $data);
     }
 
+    public function getCategories(): CategoriesDTO
+    {
+        return new CategoriesDTO($this->get('/my_store?depth=0'));
+    }
+
     public function getProduct (int $productId):ProductDTO
     {
-        return new ProductDTO($this->get('/product/'.$productId));
+        return new ProductDTO(json_decode((string)$this->get('/product/'.$productId)->getBody(), true)['product_details']);
     }
 
     public function login($username, $password): array

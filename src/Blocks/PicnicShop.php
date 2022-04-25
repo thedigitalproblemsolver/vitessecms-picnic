@@ -46,6 +46,14 @@ class PicnicShop extends AbstractBlockModel
             );
             $block->set('currentSlug', $this->getDi()->view->getCurrentItem()->getSlug());
             $block->set('user', $this->getDi()->user);
+            $block->set('categories', $this->picnicService->getCategories());
+            if($this->getDi()->request->has('list')):
+                var_dump($this->picnicService->getList(
+                    $this->getDi()->request->get('list'),
+                    $this->getDi()->request->get('subList')
+                ));
+                die();
+            endif;
 
             switch ($this->getDi()->request->get('action')) :
                 case 'cart':
@@ -58,10 +66,14 @@ class PicnicShop extends AbstractBlockModel
                     $block->set('title', 'favorieten');
                     $block->set('favoriteActive', true);
                 break;
+                case 'settings':
+                    $block->set('title', 'settings');
+                    $block->set('settingsActive', true);
+                break;
                 default:
-                    $this->parseSearch($block);
                     $block->set('title', 'zoeken');
                     $block->set('searchActive', true);
+                    $this->parseSearch($block);
             endswitch;
         endif;
 
@@ -74,7 +86,10 @@ class PicnicShop extends AbstractBlockModel
             $this->getDi()->session->set('picnic_searchTerm',$this->getDi()->request->getPost('picnic_searchTerm'));
         endif;
 
-        if($this->getDi()->session->has('picnic_searchTerm')) :
+        if(
+            $this->getDi()->session->has('picnic_searchTerm')
+            && !empty($this->getDi()->session->get('picnic_searchTerm'))
+        ) :
             $searchResult = $this->picnicService->search($this->getDi()->session->get('picnic_searchTerm'));
             $items = [];
             foreach ($searchResult->getItems() as  $key => $item) :
@@ -88,6 +103,10 @@ class PicnicShop extends AbstractBlockModel
             endforeach;
             $searchResult->setItems($items);
             $block->set('searchResult', $searchResult);
+        else :
+            $block->set('title', 'Eerder besteld');
+            $block->set('previousOrdered', $block->_('categories')->getPreviousOrdered());
+            $block->set('hasPreviousOrdered', $block->_('categories')->hasPreviousOrdered());
         endif;
     }
 

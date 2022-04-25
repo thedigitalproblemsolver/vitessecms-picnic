@@ -12,8 +12,8 @@ class SearchForm extends AbstractForm
         $this->addText(
             'Term',
             'picnic_searchTerm',
-            (new Attributes())->setRequired()->setDefaultValue($this->session->get('picnic_searchTerm'))
+            (new Attributes())->setDefaultValue($this->session->get('picnic_searchTerm'))
         )->addSubmitButton('Zoeken')
-        ;
+            ->addEmptyButton('Verwijder zoekterm');
     }
 }
