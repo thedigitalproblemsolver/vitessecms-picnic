@@ -42,17 +42,17 @@ class ProductDTO
 
     public function getDisplayPrice(): float
     {
-        return $this->data['display_price']/100;
+        return $this->data['display_price'] / 100;
     }
 
     public function getDescription(): string
     {
-        return $this->data['description']??'';
+        return $this->data['description'] ?? '';
     }
 
     public function getImageUrl(): string
     {
-        return  'https://storefront-prod.nl.Picnicinternational.com/static/images/'.$this->data['image_id'].'/large.png';
+        return 'https://storefront-prod.nl.Picnicinternational.com/static/images/' . $this->data['image_id'] . '/large.png';
     }
 
     public function getFavorite(): Favorite

@@ -12,7 +12,7 @@ use VitesseCms\Picnic\Listeners\Modules\DialogflowWebhookListener;
 use VitesseCms\Picnic\Listeners\Services\PicnicServiceListener;
 use VitesseCms\Picnic\Services\PicnicService;
 
-class InitiateListeners  implements InitiateListenersInterface
+class InitiateListeners implements InitiateListenersInterface
 {
     public static function setListeners(InjectableInterface $di): void
     {

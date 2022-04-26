@@ -4,7 +4,8 @@ namespace VitesseCms\Picnic\DTO;
 
 use Psr\Http\Message\ResponseInterface;
 
-class CategoriesDTO {
+class CategoriesDTO
+{
 
     /**
      * @var mixed
@@ -28,21 +29,21 @@ class CategoriesDTO {
         $this->previousOrdered = [];
         foreach ($this->data['catalog'] as $category) :
             $categoryDTO = new CategoryDTO($category);
-            if($categoryDTO->getId() === 'purchases'):
-               foreach($categoryDTO->getSubCategories()[0]->getSubCategories() as $product):
-                   $this->previousOrdered[] = new ProductDTO($product->getData());
-               endforeach;
-           else :
-               $this->categories[] = $categoryDTO;
+            if ($categoryDTO->getId() === 'purchases'):
+                foreach ($categoryDTO->getSubCategories()[0]->getSubCategories() as $product):
+                    $this->previousOrdered[] = new ProductDTO($product->getData());
+                endforeach;
+            else :
+                $this->categories[] = $categoryDTO;
                 //var_dump($category);
-           //
-               //var_dump($category['items'][1]);
-               //die();
+                //
+                //var_dump($category['items'][1]);
+                //die();
             endif;
         endforeach;
     }
 
-    public function hasCategories() : bool
+    public function hasCategories(): bool
     {
         return count($this->categories) > 0;
     }

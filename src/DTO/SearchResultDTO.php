@@ -4,7 +4,8 @@ namespace VitesseCms\Picnic\DTO;
 
 use Psr\Http\Message\ResponseInterface;
 
-class SearchResultDTO {
+class SearchResultDTO
+{
 
     /**
      * @var mixed
@@ -21,7 +22,7 @@ class SearchResultDTO {
         $this->data = json_decode((string)$response->getBody(), true)[0];
         $items = [];
         foreach ($this->data['items'] as $item):
-            if(isset($item['name'])) :
+            if (isset($item['name'])) :
                 $this->items[] = new ProductDTO($item);
             endif;
         endforeach;

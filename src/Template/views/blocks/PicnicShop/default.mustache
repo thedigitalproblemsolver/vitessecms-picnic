@@ -4,17 +4,21 @@
         <a class="btn btn-primary {{#block.searchActive}}active{{/block.searchActive}}" href="{{block.currentSlug}}">
             <i class="fa fa-search"></i>&nbsp;Zoeken
         </a>
-        <a class="btn btn-primary {{#block.cartActive}}active{{/block.cartActive}}" href="{{block.currentSlug}}?action=cart">
+        <a class="btn btn-primary {{#block.cartActive}}active{{/block.cartActive}}"
+           href="{{block.currentSlug}}?action=cart">
             Mandje&nbsp;<i class="fa fa-shopping-cart"></i>
         </a>
-        <a class="btn btn-primary {{#block.listActive}}active{{/block.listActive}}" href="{{block.currentSlug}}?action=list">
+        <a class="btn btn-primary {{#block.listActive}}active{{/block.listActive}}"
+           href="{{block.currentSlug}}?action=list">
             Categorie&euml;n&nbsp;<i class="fa fa-list"></i>
         </a>
         {{#block.user.isLoggedIn}}
-            <a class="btn btn-primary {{#block.favoriteActive}}active{{/block.favoriteActive}}" href="{{block.currentSlug}}?action=favorite">
+            <a class="btn btn-primary {{#block.favoriteActive}}active{{/block.favoriteActive}}"
+               href="{{block.currentSlug}}?action=favorite">
                 Favorieten&nbsp;<i class="fa fa-heart"></i>
             </a>
-            <a class="btn btn-primary {{#block.settingsActive}}active{{/block.settingsActive}}" href="{{block.currentSlug}}?action=settings">
+            <a class="btn btn-primary {{#block.settingsActive}}active{{/block.settingsActive}}"
+               href="{{block.currentSlug}}?action=settings">
                 Settings&nbsp;<i class="fa fa-gear"></i>
             </a>
         {{/block.user.isLoggedIn}}
@@ -60,7 +64,8 @@
                             &euro; {{getDisplayPrice}}
                         </td>
                         <td>
-                            <a id="delete_{{getId}}" class="fa fa-trash" href="picnic/index/removefromcart/{{getId}}"></a>
+                            <a id="delete_{{getId}}" class="fa fa-trash"
+                               href="picnic/index/removefromcart/{{getId}}"></a>
                             <a class="fa fa-plus" href="picnic/index/addtocart/{{getId}}"></a>
                         </td>
                     </tr>
@@ -78,7 +83,8 @@
                         <tr id="{{getId}}">
                             <td>{{getProduct.getName}}</td>
                             <td>
-                                <a id="delete_{{getId}}" class="fa fa-trash" href="picnic/index/removefavorite/{{getId}}"></a>
+                                <a id="delete_{{getId}}" class="fa fa-trash"
+                                   href="picnic/index/removefavorite/{{getId}}"></a>
                                 <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getProduct.getId}}"></a>
                             </td>
                         </tr>
@@ -93,22 +99,22 @@
         {{#block.hasPreviousOrdered}}
             <table class="table table-bordered">
                 {{#block.previousOrdered}}
-                        <tr>
-                            <td>
-                                <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
-                            </td>
-                            <td>
-                                <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
-                                {{#block.user.isLoggedIn}}
-                                    {{#isFavorite}}
-                                        <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
-                                    {{/isFavorite}}
-                                    {{^isFavorite}}
-                                        <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
-                                    {{/isFavorite}}
-                                {{/block.user.isLoggedIn}}
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <a href="picnic/index/product/{{getId}}" class="openmodal" target="_blank">{{getName}}</a>
+                        </td>
+                        <td>
+                            <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
+                            {{#block.user.isLoggedIn}}
+                                {{#isFavorite}}
+                                    <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
+                                {{/isFavorite}}
+                                {{^isFavorite}}
+                                    <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
+                                {{/isFavorite}}
+                            {{/block.user.isLoggedIn}}
+                        </td>
+                    </tr>
                 {{/block.previousOrdered}}
             </table>
         {{/block.hasPreviousOrdered}}

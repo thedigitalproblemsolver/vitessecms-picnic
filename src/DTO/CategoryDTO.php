@@ -18,7 +18,7 @@ class CategoryDTO
         $this->data = $data;
         $this->parentList = $parentList;
         $this->subCategories = [];
-        if(isset($this->data['items'])):
+        if (isset($this->data['items'])):
             foreach ($this->data['items'] as $subCategory) :
                 $this->subCategories[] = new CategoryDTO($subCategory, $this->data['id']);
             endforeach;
@@ -45,17 +45,17 @@ class CategoryDTO
         return $this->subCategories;
     }
 
-    public function getData():array
+    public function getData(): array
     {
         return $this->data;
     }
 
     public function getListLink(): string
     {
-        if($this->parentList !== null):
-            return 'list='.$this->parentList.'&sublist='.$this->data['id'];
+        if ($this->parentList !== null):
+            return 'list=' . $this->parentList . '&sublist=' . $this->data['id'];
         endif;
 
-        return 'list='.$this->data['id'];
+        return 'list=' . $this->data['id'];
     }
 }

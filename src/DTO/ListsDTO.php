@@ -24,7 +24,7 @@ class ListsDTO
         $this->categories = [];
         $this->products = [];
         foreach ($this->data as $category) :
-            if($category['type'] === PicnicEnum::SINGLE_ARTICLE) :
+            if ($category['type'] === PicnicEnum::SINGLE_ARTICLE) :
                 $this->products[] = new ProductDTO($category);
             elseif ($category['type'] === PicnicEnum::CATEGORY) :
                 $this->categories[] = new CategoryDTO($category);
@@ -46,12 +46,13 @@ class ListsDTO
     {
         return count($this->products) > 0;
     }
+
     public function getProducts(): array
     {
         return $this->products;
     }
 
-    public function setProducts(array $products):self
+    public function setProducts(array $products): self
     {
         $this->products = $products;
 

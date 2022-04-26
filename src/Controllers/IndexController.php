@@ -99,9 +99,9 @@ class IndexController extends AbstractEventController implements InjectableInter
         if ($this->session->has(PicnicEnum::AUTH_HEADER)):
             /** @var PicnicService $picnicService */
             $picnicService = $this->eventsManager->fire(PicnicEnum::ATTACH_SERVICE_LISTENER, new stdClass());
-            var_dump(json_decode((string)$picnicService->getCategories()->getBody(),true));
+            var_dump(json_decode((string)$picnicService->getCategories()->getBody(), true));
         endif;
-die();
+        die();
         $this->redirect();
     }
 }
