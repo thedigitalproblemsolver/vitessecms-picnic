@@ -11,7 +11,6 @@ use VitesseCms\Database\Models\FindValueIterator;
 use VitesseCms\Picnic\Enums\PicnicEnum;
 use VitesseCms\Picnic\Forms\LoginForm;
 use VitesseCms\Picnic\Forms\SearchForm;
-use VitesseCms\Picnic\Helpers\BreadcrumbHelper;
 use VitesseCms\Picnic\Repositories\FavoriteRepository;
 use VitesseCms\Picnic\Services\PicnicService;
 
@@ -158,12 +157,10 @@ class PicnicShop extends AbstractBlockModel
                 endforeach;
                 $lists->setProducts($products);
             endif;
+            $block->set('showBackButton', true);
         else :
             $lists = $this->picnicService->getCategories();
-            $this->getDi()->session->set('breadcrumbs', new BreadcrumbHelper());
         endif;
-
-        $block->set('breadcrumbs', $this->getDi()->session->get('breadcrumbs'));
         $block->set('lists', $lists);
     }
 }

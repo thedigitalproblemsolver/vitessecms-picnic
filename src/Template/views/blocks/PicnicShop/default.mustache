@@ -31,6 +31,11 @@
         </div>
     </div>
     <div class="col-12 col-md-9 search-result">
+        {{#block.showBackButton}}
+            <button class="btn btn-secondary mb-3" onclick="history.back()">
+                < Terug
+            </button>
+        {{/block.showBackButton}}
         {{#block.searchResult.hasItems}}
             <table class="table table-bordered">
                 {{#block.searchResult.getItems}}
@@ -119,13 +124,9 @@
             </table>
         {{/block.hasPreviousOrdered}}
         {{#block.lists.hasCategories}}
-            <ul>
                 {{#block.lists.getCategories}}
-                    <li>
-                        <a href="{{block.currentSlug}}?action=list&{{getListLink}}">{{getName}}</a>
-                    </li>
+                    <a class="btn btn-primary mb-3" href="{{block.currentSlug}}?action=list&{{getListLink}}">{{getName}}</a>
                 {{/block.lists.getCategories}}
-            </ul>
         {{/block.lists.hasCategories}}
         {{#block.lists.hasProducts}}
             <table class="table table-bordered">

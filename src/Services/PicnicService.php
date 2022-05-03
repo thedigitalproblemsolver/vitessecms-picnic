@@ -81,6 +81,7 @@ class PicnicService
         endif;
         //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions
         //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions?sublist=624d52036a3ea840a1408e19
+
         return new ListsDTO(json_decode((string)$this->get(implode('', $path))->getBody(), true));
     }
 
@@ -192,7 +193,6 @@ class PicnicService
             throw new Exception('Something went wrong');
         }
 
-        //return json_decode((string)$response->getBody(), true);
         return $response;
     }
 
