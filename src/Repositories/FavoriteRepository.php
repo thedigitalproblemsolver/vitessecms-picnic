@@ -25,8 +25,8 @@ class FavoriteRepository
 
     public function findAll(
         ?FindValueIterator $findValues = null,
-        bool $hideUnpublished = true,
-        ?int $limit = null,
+        bool               $hideUnpublished = true,
+        ?int               $limit = null,
         ?FindOrderIterator $findOrders = null
     ): FavoriteIterator
     {
@@ -42,11 +42,11 @@ class FavoriteRepository
 
     public function findFirst(
         ?FindValueIterator $findValues = null,
-        bool $hideUnpublished = true
+        bool               $hideUnpublished = true
     ): ?Favorite
     {
         $favorites = $this->findAll($findValues, $hideUnpublished);
-        if($favorites->count() === 0) :
+        if ($favorites->count() === 0) :
             return null;
         endif;
 

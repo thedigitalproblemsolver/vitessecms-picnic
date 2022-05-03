@@ -17,7 +17,7 @@ class PicnicServiceListener
         $this->picnic = $picnic;
     }
 
-    public function attach( Event $event): PicnicService
+    public function attach(Event $event): PicnicService
     {
         return $this->picnic;
     }

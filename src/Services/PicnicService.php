@@ -6,11 +6,14 @@ use Exception;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use VitesseCms\Picnic\DTO\CartDTO;
+use VitesseCms\Picnic\DTO\CategoriesDTO;
+use VitesseCms\Picnic\DTO\ListsDTO;
 use VitesseCms\Picnic\DTO\ProductDTO;
 use VitesseCms\Picnic\DTO\SearchResultDTO;
 use VitesseCms\Picnic\Enums\PicnicEnum;
 
-class PicnicService {
+class PicnicService
+{
     /**
      * @var string
      */
@@ -27,9 +30,10 @@ class PicnicService {
     private $client;
 
     public function __construct(
-        Client $client,
+        Client  $client,
         ?string $authHeader
-    ){
+    )
+    {
         $this->baseUrl = $this->generateBaseUrl();
         $this->client = $client;
 
@@ -69,14 +73,16 @@ class PicnicService {
         return new SearchResultDTO($this->get('/search?search_term=' . $query));
     }
 
-    public function getList($listId = null)
+    public function getList(string $listPath, string $subList = null): ListsDTO
     {
-        if ($listId) {
-            $path = "/lists/" . $listId;
-        } else {
-            $path = "/lists/";
-        }
-        return $this->get($path);
+        $path = ['/lists/', $listPath];
+        if ($subList !== null):
+            $path[] = '?sublist=' . $subList;
+        endif;
+        //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions
+        //https://storefront-prod.nl.picnicinternational.com/api/15/lists/promotions?sublist=624d52036a3ea840a1408e19
+
+        return new ListsDTO(json_decode((string)$this->get(implode('', $path))->getBody(), true));
     }
 
     public function getCart(): CartDTO
@@ -101,7 +107,7 @@ class PicnicService {
 
     public function getDeliverySlots()
     {
-        return $this->get('/cart/delivery_slots');
+        return $this->get('/cart/delivery_slots')->getBody();
     }
 
     public function getDelivery($deliveryId)
@@ -117,7 +123,7 @@ class PicnicService {
         if ($summary) {
             return $this->post('/deliveries/summary', $data);
         }
-        return $this->post('/deliveries', $data);
+        return $this->post('/lists');
     }
 
     public function getCurrentDeliveries()
@@ -126,9 +132,14 @@ class PicnicService {
         return $this->post('/deliveries/', $data);
     }
 
-    public function getProduct (int $productId):ProductDTO
+    public function getCategories(): CategoriesDTO
     {
-        return new ProductDTO($this->get('/product/'.$productId));
+        return new CategoriesDTO($this->get('/my_store?depth=0'));
+    }
+
+    public function getProduct(int $productId): ProductDTO
+    {
+        return new ProductDTO(json_decode((string)$this->get('/product/' . $productId)->getBody(), true)['product_details']);
     }
 
     public function login($username, $password): array
@@ -137,7 +148,7 @@ class PicnicService {
             $this->removeHeaderByKey('x-Picnic-auth');
         }
 
-        $url =  '/user/login';
+        $url = '/user/login';
         $secret = md5(utf8_encode($password));
         $data = [
             'key' => $username,
@@ -152,7 +163,7 @@ class PicnicService {
         );
 
         //if ($response) {
-            $this->headers[PicnicEnum::AUTH_HEADER] = $response->getHeader(PicnicEnum::AUTH_HEADER);
+        $this->headers[PicnicEnum::AUTH_HEADER] = $response->getHeader(PicnicEnum::AUTH_HEADER);
         //}
         return $response->getHeader(PicnicEnum::AUTH_HEADER);
     }
@@ -160,11 +171,11 @@ class PicnicService {
     public function post(string $uri, $data = null, array $options = [])
     {
         $options['headers'] = $this->headers;
-        if($data !== null) :
+        if ($data !== null) :
             $options['json'] = $data;
         endif;
 
-        $response = $this->client->request('POST', $this->baseUrl.$uri, $options);
+        $response = $this->client->request('POST', $this->baseUrl . $uri, $options);
         if ($response->getStatusCode() !== 200) {
             throw new Exception('Something went wrong');
         }
@@ -177,12 +188,11 @@ class PicnicService {
     {
         $options['headers'] = $this->headers;
 
-        $response = $this->client->request('GET', $this->baseUrl.$uri, $options);
+        $response = $this->client->request('GET', $this->baseUrl . $uri, $options);
         if ($response->getStatusCode() !== 200) {
             throw new Exception('Something went wrong');
         }
 
-        //return json_decode((string)$response->getBody(), true);
         return $response;
     }
 
