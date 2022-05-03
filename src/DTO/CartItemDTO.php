@@ -16,7 +16,7 @@ class CartItemDTO
 
     public function getDisplayPrice(): float
     {
-        return $this->item['display_price']/100;
+        return $this->item['display_price'] / 100;
     }
 
     public function getId(): string

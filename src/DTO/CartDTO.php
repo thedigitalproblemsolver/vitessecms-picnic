@@ -37,6 +37,11 @@ class CartDTO
 
     public function getCheckoutTotalPrice(): float
     {
-        return $this->data['checkout_total_price']/100;
+        return $this->data['checkout_total_price'] / 100;
+    }
+
+    public function getItemsCount(): int
+    {
+        return count($this->data['items']);
     }
 }

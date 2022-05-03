@@ -7,7 +7,7 @@ use VitesseCms\Picnic\Models\Favorite;
 class FavoriteFactory
 {
     public static function create(
-        int $picnicId,
+        int    $picnicId,
         string $userId
     ): Favorite
     {

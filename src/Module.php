@@ -2,9 +2,9 @@
 
 namespace VitesseCms\Picnic;
 
+use Phalcon\DiInterface;
 use VitesseCms\Admin\Utils\AdminUtil;
 use VitesseCms\Core\AbstractModule;
-use Phalcon\DiInterface;
 use VitesseCms\Picnic\Repositories\FavoriteRepository;
 use VitesseCms\Picnic\Repositories\RepositoryCollection;
 
