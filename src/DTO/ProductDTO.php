@@ -40,8 +40,46 @@ class ProductDTO
         return $this->data['name'];
     }
 
+    public function getPricePerWeight(): string
+    {
+        return $this->data['unit_quantity_sub']??'';
+    }
+
+    public function getWeight(): string
+    {
+        return $this->data['unit_quantity'];
+    }
+
+    public function getNutritionalValues(): array
+    {
+        return $this->data['nutritional_values'];
+    }
+
+    public function getIngredients(): array
+    {
+        foreach ($this->data['items'] as $item) :
+            if($item['id'] == 'ingredients'):
+                return explode(', ',$item['items'][0]['text']);
+            endif;
+        endforeach;
+
+        return [];
+    }
+
+    public function getCountry(): string
+    {
+        return str_replace('Land van herkomst: ','',$this->data['additional_info']);
+    }
+
+    public function getCompany(): string
+    {
+        return $this->data['label_holder']??'';
+    }
+
     public function getDisplayPrice(): float
     {
+        //var_dump($this->data);
+        //die();
         return $this->data['display_price'] / 100;
     }
 

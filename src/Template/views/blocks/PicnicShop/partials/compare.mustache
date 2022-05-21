@@ -1,0 +1,73 @@
+<div class="row">
+    {{#products}}
+        <div class="col-md-{{columnSpan}}">
+            <h3>{{getName}}</h3>
+        </div>
+    {{/products}}
+    {{#products}}
+        <div class="col-md-{{columnSpan}}">
+            <div class="text-center mt-2 mb-3">
+                <img src="{{getImageUrl}}" height="150px" />
+            </div>
+            <p>{{getDescription}}</p>
+        </div>
+    {{/products}}
+    {{#products}}
+        <div class="col-md-{{columnSpan}}">
+            <div class="btn-group mb-4">
+                <a href="picnic/index/addtocart/{{product.getId}}" class="btn btn-success">bestellen</a>
+                <a href="picnic/index/removecompare/{{getId}}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Prijs</th>
+                    <td>&euro;{{getDisplayPrice}}</td>
+                </tr>
+                <tr>
+                    <th>Gewicht</th>
+                    <td>{{getWeight}}</td>
+                </tr>
+                <tr>
+                    <th>Prijs per gewicht</th>
+                    <td>{{getPricePerWeight}}</td>
+                </tr>
+                {{#getNutritionalValues}}
+                    <tr>
+                        <th>{{name}}</th>
+                        <td>{{value}}</td>
+                    </tr>
+                    {{#sub_values}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{value}}</td>
+                        </tr>
+                    {{/sub_values}}
+                {{/getNutritionalValues}}
+            </table>
+        </div>
+    {{/products}}
+    {{#products}}
+        <div class="col-md-{{columnSpan}} pl-4">
+            <b>Ingredienten</b>
+            <ol class="mt-2 pl-4">
+            {{#getIngredients}}
+                <li>{{.}}</li>
+            {{/getIngredients}}
+            </ol>
+        </div>
+    {{/products}}
+    {{#products}}
+        <div class="col-md-{{columnSpan}}">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Land van herkomst</th>
+                    <td>{{getCountry}}</td>
+                </tr>
+                <tr>
+                    <th>Leverancier</th>
+                    <td>{{getCompany}}</td>
+                </tr>
+            </table>
+        </div>
+    {{/products}}
+</div>

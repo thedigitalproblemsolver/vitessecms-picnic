@@ -104,4 +104,40 @@ class IndexController extends AbstractEventController implements InjectableInter
         die();
         $this->redirect();
     }
+
+    public function addcompareAction(string $id): void
+    {
+        if ($this->session->has(PicnicEnum::AUTH_HEADER)):
+            if (!$this->session->has('picnicCompare')) :
+                $this->session->set('picnicCompare', []);
+            endif;
+
+            $picnicCompare = $this->session->get('picnicCompare');
+            if(count($picnicCompare) >= 4):
+                $this->flash->setError('Het maximaal aantal te vergelijken producten is bereikt.');
+            else :
+                if (!isset($picnicCompare[$id])):
+                    $picnicCompare[$id] = $id;
+                endif;
+                $this->session->set('picnicCompare', $picnicCompare);
+
+                $this->flash->setSucces('Product aan vergelijklijst toegevoegd');
+            endif;
+        endif;
+
+        $this->redirect();
+    }
+
+    public function removecompareAction(string $id): void
+    {
+        if ($this->session->has(PicnicEnum::AUTH_HEADER)):
+            if ($this->session->has('picnicCompare')) :
+                $picnicCompare = $this->session->get('picnicCompare');
+                unset($picnicCompare[$id]);
+                $this->session->set('picnicCompare', $picnicCompare);
+            endif;
+        endif;
+
+        $this->redirect();
+    }
 }
