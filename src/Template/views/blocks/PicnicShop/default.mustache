@@ -12,12 +12,16 @@
            href="{{block.currentSlug}}?action=list">
             Categorie&euml;n&nbsp;<i class="fa fa-list"></i>
         </a>
+        <a class="btn btn-primary {{#block.compareActive}}active{{/block.compareActive}}"
+           href="{{block.currentSlug}}?action=compare">
+            Vergelijken<i class="fa fa-bar-chart ml-1"></i>
+        </a>
         {{#block.user.isLoggedIn}}
             <a class="btn btn-primary {{#block.favoriteActive}}active{{/block.favoriteActive}}"
                href="{{block.currentSlug}}?action=favorite">
                 Favorieten&nbsp;<i class="fa fa-heart"></i>
             </a>
-            <a class="btn btn-primary {{#block.settingsActive}}active{{/block.settingsActive}}"
+             <a class="btn btn-primary {{#block.settingsActive}}active{{/block.settingsActive}}"
                href="{{block.currentSlug}}?action=settings">
                 Settings&nbsp;<i class="fa fa-gear"></i>
             </a>
@@ -25,12 +29,12 @@
     </div>
 </div>
 <div class="row mt-3">
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-2">
         <div class=" search-form">
             {{{block.searchForm}}}
         </div>
     </div>
-    <div class="col-12 col-md-9 search-result">
+    <div class="col-12 col-md-10">
         {{#block.showBackButton}}
             <button class="btn btn-secondary mb-3" onclick="history.back()">
                 < Terug
@@ -47,12 +51,13 @@
                             <a class="fa fa-shopping-cart" href="picnic/index/addtocart/{{getId}}"></a>
                             {{#block.user.isLoggedIn}}
                                 {{#isFavorite}}
-                                    <a class="fa fa-heart" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
+                                    <a class="fa fa-heart ml-1" href="picnic/index/removefavorite/{{getFavorite.getId}}"></a>
                                 {{/isFavorite}}
                                 {{^isFavorite}}
-                                    <a class="fa fa-heart-o" href="picnic/index/addfavorite/{{getId}}"></a>
+                                    <a class="fa fa-heart-o ml-1" href="picnic/index/addfavorite/{{getId}}"></a>
                                 {{/isFavorite}}
                             {{/block.user.isLoggedIn}}
+                            <a class="fa fa-bar-chart ml-1" href="picnic/index/addcompare/{{getId}}"></a>
                         </td>
                     </tr>
                 {{/block.searchResult.getItems}}
@@ -150,7 +155,8 @@
                 {{/block.lists.getProducts}}
             </table>
         {{/block.lists.hasProducts}}
-
-
+        {{#block.PicnicMainSection}}
+            {{{block.PicnicMainSection}}}
+        {{/block.PicnicMainSection}}
     </div>
 </div>

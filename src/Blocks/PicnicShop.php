@@ -8,6 +8,8 @@ use VitesseCms\Block\Models\Block;
 use VitesseCms\Core\Services\ViewService;
 use VitesseCms\Database\Models\FindValue;
 use VitesseCms\Database\Models\FindValueIterator;
+use VitesseCms\Mustache\DTO\RenderTemplateDTO;
+use VitesseCms\Mustache\Enum\ViewEnum;
 use VitesseCms\Picnic\Enums\PicnicEnum;
 use VitesseCms\Picnic\Forms\LoginForm;
 use VitesseCms\Picnic\Forms\SearchForm;
@@ -66,6 +68,11 @@ class PicnicShop extends AbstractBlockModel
                 case 'settings':
                     $block->set('title', 'settings');
                     $block->set('settingsActive', true);
+                    break;
+                case 'compare' :
+                    $block->set('title', 'vergelijken');
+                    $this->parseCompare($block);
+                    $block->set('compareActive', true);
                     break;
                 default:
                     $block->set('title', 'zoeken');
@@ -162,5 +169,29 @@ class PicnicShop extends AbstractBlockModel
             $lists = $this->picnicService->getCategories();
         endif;
         $block->set('lists', $lists);
+    }
+
+    private function parseCompare(Block $block) : void
+    {
+        if ($this->getDi()->session->has('picnicCompare')):
+            $products = [];
+            foreach ($this->getDi()->session->get('picnicCompare') as $productId):
+                $products[] = $this->picnicService->getProduct((int) $productId);
+            endforeach;
+            $block->set(
+                'PicnicMainSection',
+                $block->getDi()->eventsManager->fire(
+                    ViewEnum::RENDER_TEMPLATE_EVENT,
+                    new RenderTemplateDTO(
+                        'views/blocks/PicnicShop/partials/compare',
+                        '',
+                        [
+                            'columnSpan' => floor(12/count($products)),
+                            'products' => $products
+                        ]
+                    )
+                )
+            );
+        endif;
     }
 }
