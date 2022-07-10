@@ -25,7 +25,7 @@
     "ext-json": "*",
     "vitessecms/core": "~0.2.21",
     "guzzlehttp/guzzle": "7.4.1",
-    "vitessecms/form": "~0.2.8",
+    "vitessecms/form": "~0.2.9",
     "vitessecms/google": "~0.2.4",
     "eristemena/dialogflow-fulfillment-webhook-php": "^1.3"
   }
