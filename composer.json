@@ -23,9 +23,9 @@
   },
   "require": {
     "ext-json": "*",
-    "vitessecms/core": "~0.3.6",
+    "vitessecms/core": "~0.4.1",
     "guzzlehttp/guzzle": "7.4.1",
-    "vitessecms/form": "~0.3.0",
+    "vitessecms/form": "~0.4.0",
     "vitessecms/google": "~0.3.0",
     "eristemena/dialogflow-fulfillment-webhook-php": "^1.3"
   }
