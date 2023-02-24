@@ -2,6 +2,7 @@
 
 namespace VitesseCms\Picnic\Blocks;
 
+use Phalcon\Di\Di;
 use stdClass;
 use VitesseCms\Block\AbstractBlockModel;
 use VitesseCms\Block\Models\Block;
@@ -28,15 +29,15 @@ class PicnicShop extends AbstractBlockModel
      */
     private $favoriteRepository;
 
-    public function __construct(ViewService $view)
+    public function __construct(ViewService $view, Di $di)
     {
-        parent::__construct($view);
+        parent::__construct($view, $di);
         $this->favoriteRepository = new FavoriteRepository();
     }
 
     public function parse(Block $block): void
     {
-        if (!$this->getDi()->session->has(PicnicEnum::AUTH_HEADER)):
+        if (!$this->getDi()->get('session')->has(PicnicEnum::AUTH_HEADER)):
             $block->setTemplate('views/blocks/PicnicShop/login');
             $block->set('form', (new LoginForm())->renderForm('picnic/index/login/'));
         else:
@@ -84,6 +85,76 @@ class PicnicShop extends AbstractBlockModel
         parent::parse($block);
     }
 
+    private function parseList(Block $block): void
+    {
+        if ($this->getDi()->request->has('list')):
+            $lists = $this->picnicService->getList(
+                $this->getDi()->request->get('list'),
+                $this->getDi()->request->get('subList')
+            );
+            if ($lists->hasProducts()):
+                $products = [];
+                foreach ($lists->getProducts() as $product) :
+                    $product->setFavorite($this->favoriteRepository->findFirst(
+                        new FindValueIterator([
+                            new FindValue('userId', (string)$this->getDi()->user->getId()),
+                            new FindValue('picnicId', (int)$product->getId())
+                        ])
+                    ));
+                    $products[] = $product;
+                endforeach;
+                $lists->setProducts($products);
+            endif;
+            $block->set('showBackButton', true);
+        else :
+            $lists = $this->picnicService->getCategories();
+        endif;
+        $block->set('lists', $lists);
+    }
+
+    private function parseFavorite(Block $block): void
+    {
+        $favorites = $this->favoriteRepository->findAll(
+            new FindValueIterator([new FindValue('userId', (string)$this->getDi()->user->getId())])
+        );
+        if ($favorites->count()):
+            $products = [];
+            while ($favorites->valid()):
+                $favorite = $favorites->current();
+                $favorite->setProduct($this->picnicService->getProduct($favorite->getPicnicId()));
+                $products[] = $favorite;
+                $favorites->next();
+            endwhile;
+
+            $block->set('favorites', $products);
+            $block->set('hasFavorites', true);
+        endif;
+    }
+
+    private function parseCompare(Block $block): void
+    {
+        if ($this->getDi()->session->has('picnicCompare')):
+            $products = [];
+            foreach ($this->getDi()->session->get('picnicCompare') as $productId):
+                $products[] = $this->picnicService->getProduct((int)$productId);
+            endforeach;
+            $block->set(
+                'PicnicMainSection',
+                $block->getDi()->eventsManager->fire(
+                    ViewEnum::RENDER_TEMPLATE_EVENT,
+                    new RenderTemplateDTO(
+                        'views/blocks/PicnicShop/partials/compare',
+                        '',
+                        [
+                            'columnSpan' => floor(12 / count($products)),
+                            'products' => $products
+                        ]
+                    )
+                )
+            );
+        endif;
+    }
+
     private function parseSearch(Block $block): void
     {
         if ($this->getDi()->request->hasPost('picnic_searchTerm')):
@@ -122,76 +193,6 @@ class PicnicShop extends AbstractBlockModel
             endforeach;
             $block->set('previousOrdered', $previousOrderedWithFavorite);
             $block->set('hasPreviousOrdered', $block->_('categories')->hasPreviousOrdered());
-        endif;
-    }
-
-    private function parseFavorite(Block $block): void
-    {
-        $favorites = $this->favoriteRepository->findAll(
-            new FindValueIterator([new FindValue('userId', (string)$this->getDi()->user->getId())])
-        );
-        if ($favorites->count()):
-            $products = [];
-            while ($favorites->valid()):
-                $favorite = $favorites->current();
-                $favorite->setProduct($this->picnicService->getProduct($favorite->getPicnicId()));
-                $products[] = $favorite;
-                $favorites->next();
-            endwhile;
-
-            $block->set('favorites', $products);
-            $block->set('hasFavorites', true);
-        endif;
-    }
-
-    private function parseList(Block $block): void
-    {
-        if ($this->getDi()->request->has('list')):
-            $lists = $this->picnicService->getList(
-                $this->getDi()->request->get('list'),
-                $this->getDi()->request->get('subList')
-            );
-            if ($lists->hasProducts()):
-                $products = [];
-                foreach ($lists->getProducts() as $product) :
-                    $product->setFavorite($this->favoriteRepository->findFirst(
-                        new FindValueIterator([
-                            new FindValue('userId', (string)$this->getDi()->user->getId()),
-                            new FindValue('picnicId', (int)$product->getId())
-                        ])
-                    ));
-                    $products[] = $product;
-                endforeach;
-                $lists->setProducts($products);
-            endif;
-            $block->set('showBackButton', true);
-        else :
-            $lists = $this->picnicService->getCategories();
-        endif;
-        $block->set('lists', $lists);
-    }
-
-    private function parseCompare(Block $block) : void
-    {
-        if ($this->getDi()->session->has('picnicCompare')):
-            $products = [];
-            foreach ($this->getDi()->session->get('picnicCompare') as $productId):
-                $products[] = $this->picnicService->getProduct((int) $productId);
-            endforeach;
-            $block->set(
-                'PicnicMainSection',
-                $block->getDi()->eventsManager->fire(
-                    ViewEnum::RENDER_TEMPLATE_EVENT,
-                    new RenderTemplateDTO(
-                        'views/blocks/PicnicShop/partials/compare',
-                        '',
-                        [
-                            'columnSpan' => floor(12/count($products)),
-                            'products' => $products
-                        ]
-                    )
-                )
-            );
         endif;
     }
 }
