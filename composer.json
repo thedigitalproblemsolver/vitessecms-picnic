@@ -9,7 +9,7 @@
   ],
   "homepage": "https://github.com/thedigitalproblemsolver/VitesseCMS",
   "license": "GPL-2.0-or-later",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "authors": [
     {
       "name": "Jasper Jaklofsky",
@@ -23,7 +23,7 @@
   },
   "require": {
     "ext-json": "*",
-    "vitessecms/core": "~0.4.5",
+    "vitessecms/core": "~0.4.6",
     "guzzlehttp/guzzle": "7.4.1",
     "vitessecms/form": "~0.4.3",
     "vitessecms/google": "~0.3.0",
