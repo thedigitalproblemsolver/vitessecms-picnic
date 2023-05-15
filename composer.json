@@ -9,7 +9,7 @@
   ],
   "homepage": "https://github.com/thedigitalproblemsolver/VitesseCMS",
   "license": "GPL-2.0-or-later",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "authors": [
     {
       "name": "Jasper Jaklofsky",
@@ -23,10 +23,8 @@
   },
   "require": {
     "ext-json": "*",
-    "vitessecms/core": "~0.4.6",
+    "vitessecms/core": "~0.5.0",
     "guzzlehttp/guzzle": "7.4.1",
-    "vitessecms/form": "~0.4.3",
-    "vitessecms/google": "~0.4.0",
-    "eristemena/dialogflow-fulfillment-webhook-php": "^1.3"
+    "vitessecms/form": "~0.4.3"
   }
 }
