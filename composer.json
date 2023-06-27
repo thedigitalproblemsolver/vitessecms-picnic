@@ -23,7 +23,7 @@
   },
   "require": {
     "ext-json": "*",
-    "vitessecms/core": "^1.2.0",
+    "vitessecms/core": "^1.2.1",
     "guzzlehttp/guzzle": "7.4.1",
     "vitessecms/form": "^1.0.0"
   }
