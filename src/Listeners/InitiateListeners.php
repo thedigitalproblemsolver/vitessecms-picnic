@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Picnic\Listeners;
 
@@ -14,20 +15,20 @@ use VitesseCms\Picnic\Services\PicnicService;
 
 class InitiateListeners implements InitiateListenersInterface
 {
-    public static function setListeners(InjectableInterface $di): void
+    public static function setListeners(InjectableInterface $injectable): void
     {
-        $picnicService = new PicnicService(new Client(), $di->session->get(PicnicEnum::AUTH_HEADER));
+        $picnicService = new PicnicService(new Client(), $injectable->session->get(PicnicEnum::AUTH_HEADER));
 
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach(
             PicnicEnum::ATTACH_SERVICE_LISTENER,
             new PicnicServiceListener($picnicService)
         );
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach(
             GoogleEnum::DIALOGFLOW_WEBHOOK_EVENT,
             new DialogflowWebhookListener(
                 $picnicService,
-                $di->setting->getString(SettingEnum::LOGIN_USERNAME),
-                $di->setting->getString(SettingEnum::LOGIN_PASSWORD),
+                $injectable->setting->getString(SettingEnum::LOGIN_USERNAME),
+                $injectable->setting->getString(SettingEnum::LOGIN_PASSWORD),
             )
         );
     }
