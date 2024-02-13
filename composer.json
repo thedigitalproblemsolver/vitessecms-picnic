@@ -25,6 +25,6 @@
     "ext-json": "*",
     "vitessecms/core": "^1.8.0",
     "guzzlehttp/guzzle": "7.4.1",
-    "vitessecms/form": "^1.4.0"
+    "vitessecms/form": "^1.5.0"
   }
 }
